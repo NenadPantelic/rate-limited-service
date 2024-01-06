@@ -1,15 +1,15 @@
 package com.np.ratelimitedservice.properties;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@Data
+@AllArgsConstructor
 @ConfigurationProperties(prefix = "quote.generation")
 @ConfigurationPropertiesScan
 public class QuoteGenerationConfig {
 
-    private final int limit;
-    private final int minWordsCounter;
-    private final int maxWordsCounter;
+    public final int limit;
+    public final int minWordsCounter;
+    public final int maxWordsCounter;
 }

@@ -1,8 +1,7 @@
 package com.np.ratelimitedservice.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.np.ratelimitedservice.exception.ApiError;
 import com.np.ratelimitedservice.exception.ApiException;
+import com.np.ratelimitedservice.util.HttpUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,9 +32,8 @@ public class AuthFilter extends OncePerRequestFilter {
             "/favicon.ico"
     );
 
-    private static final String TOKEN_HEADER = "x-auth-token";
+    private static final String API_KEY_HEADER = "x-Api-Key";
     private static final String FORWARDED_FOR_HEADER = "X-FORWARDED-FOR";
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final AuthResolver authResolver;
 
@@ -48,26 +46,34 @@ public class AuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        final String token = request.getHeader(TOKEN_HEADER);
+        final String apiKey = request.getHeader(API_KEY_HEADER);
+        if (apiKey == null || apiKey.isEmpty()) {
+            HttpUtil.setErrorResponse(
+                    response,
+                    ApiException.UNAUTHORIZED.getMessage(),
+                    HttpStatus.UNAUTHORIZED
+            );
+        }
+
         final String path = request.getRequestURI();
         final String ip = getClientIp(request);
         log.info("Request made by {} targeting {}", ip, path);
 
         try {
-            Authentication authentication = getAuthentication(token);
+            Authentication authentication = getAuthentication(apiKey);
             log.info("Authenticating user {}....", authentication.getPrincipal());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         } catch (ApiException e) {
             log.warn("Could not authenticate the user.", e);
-            setErrorResponse(
+            HttpUtil.setErrorResponse(
                     response,
                     e.getMessage(),
-                    e.equals(ApiException.UNAUTHORIZED) ? HttpStatus.UNAUTHORIZED : HttpStatus.INTERNAL_SERVER_ERROR
+                    ApiException.UNAUTHORIZED.equals(e) ? HttpStatus.UNAUTHORIZED : HttpStatus.INTERNAL_SERVER_ERROR
             );
         } catch (RuntimeException e) {
-            log.warn("Could not authenticate the user.", e);
-            setErrorResponse(
+            log.error("Could not authenticate the user.", e);
+            HttpUtil.setErrorResponse(
                     response,
                     ApiException.INTERNAL_SERVER_ERROR.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR
@@ -90,9 +96,9 @@ public class AuthFilter extends OncePerRequestFilter {
         return false;
     }
 
-    private Authentication getAuthentication(String token) {
-        UserContext userContext = authResolver.resolve(token);
-        return new UsernamePasswordAuthenticationToken(userContext.username(), null, List.of());
+    private Authentication getAuthentication(String apiKey) {
+        UserContext userContext = authResolver.resolve(apiKey);
+        return new UsernamePasswordAuthenticationToken(userContext, null, List.of());
     }
 
     private String getClientIp(HttpServletRequest request) {
@@ -102,22 +108,5 @@ public class AuthFilter extends OncePerRequestFilter {
         }
 
         return remoteAddress;
-    }
-
-    private void setErrorResponse(HttpServletResponse response,
-                                  String message,
-                                  HttpStatus status) throws IOException {
-        response.setStatus(status.value());
-        response.setContentType("application/json");
-
-        final ApiError apiError = new ApiError(message, status.value());
-
-        try {
-            String jsonResponse = OBJECT_MAPPER.writeValueAsString(apiError);
-            response.getWriter().write(jsonResponse);
-        } catch (IOException e) {
-            log.error("Unexpected error occurred", e);
-            throw e;
-        }
     }
 }

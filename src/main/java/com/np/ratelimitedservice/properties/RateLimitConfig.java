@@ -1,14 +1,14 @@
 package com.np.ratelimitedservice.properties;
 
+import com.np.ratelimitedservice.interceptor.RateLimitStrategy;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @AllArgsConstructor
-@ConfigurationProperties(prefix = "cache")
+@ConfigurationProperties(prefix = "rate-limit")
 @ConfigurationPropertiesScan
-public class CacheConfig {
+public class RateLimitConfig {
 
-    public final long size;
-    public final long expirationTimeInMinutes;
+    public final RateLimitStrategy strategy;
 }

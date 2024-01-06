@@ -20,6 +20,7 @@
         <dep.caffeine.version>3.1.8</dep.caffeine.version>
         <dep.spring-security.version>6.2.1</dep.spring-security.version>
         <dep.springdoc.version>2.3.0</dep.springdoc.version>
+        <dep.bucket4j.version>7.6.0</dep.bucket4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -72,6 +73,12 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
             <version>${dep.caffeine.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.vladimir-bukhtoyarov</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>${dep.bucket4j.version}</version>
         </dependency>
 
         <dependency>

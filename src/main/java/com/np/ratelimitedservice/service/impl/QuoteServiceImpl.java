@@ -83,7 +83,7 @@ public class QuoteServiceImpl implements QuoteService {
     private void validateNumOfQuotes(int numOfQuotes) {
         if (numOfQuotes <= 0) {
             String errorMessage = String.format(
-                    "The number of quotes must be a positive number not greater than %d.", quoteGenerationConfig.getLimit()
+                    "The number of quotes must be a positive number not greater than %d.", quoteGenerationConfig.limit
             );
             log.warn(errorMessage);
             throw ApiException.BAD_REQUEST.withError(errorMessage);
@@ -103,8 +103,8 @@ public class QuoteServiceImpl implements QuoteService {
         return Quote.builder()
                 .text(
                         RandomGenerator.getRandomText(
-                                quoteGenerationConfig.getMinWordsCounter(),
-                                quoteGenerationConfig.getMaxWordsCounter()
+                                quoteGenerationConfig.minWordsCounter,
+                                quoteGenerationConfig.maxWordsCounter
                         )
                 )
                 .author(author)
