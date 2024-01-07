@@ -26,7 +26,7 @@ public enum PricingPlan {
         }
 
         public Bandwidth getBandwidth() {
-            return Bandwidth.classic(10, Refill.intervally(200, Duration.ofHours(1)));
+            return Bandwidth.classic(200, Refill.intervally(200, Duration.ofHours(1)));
         }
     },
     PRO { // 20 min -> 300 requests/hour

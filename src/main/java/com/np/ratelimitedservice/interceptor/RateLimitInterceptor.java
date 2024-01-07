@@ -43,6 +43,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
                         ApiException.TOO_MANY_REQUESTS.getMessage(),
                         HttpStatus.TOO_MANY_REQUESTS
                 );
+                return false;
             }
 
             HttpUtil.setErrorResponse(

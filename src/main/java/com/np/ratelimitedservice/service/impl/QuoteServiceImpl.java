@@ -7,7 +7,7 @@ import com.np.ratelimitedservice.mapper.QuoteMapper;
 import com.np.ratelimitedservice.model.Quote;
 import com.np.ratelimitedservice.repository.QuoteRepository;
 import com.np.ratelimitedservice.service.QuoteService;
-import com.np.ratelimitedservice.util.RandomGenerator;
+import com.np.ratelimitedservice.util.QuoteDetailsRandomGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,7 +35,7 @@ public class QuoteServiceImpl implements QuoteService {
     @Override
     public List<QuoteResponse> generateQuotes(String author, int numOfQuotes) {
         if (author == null || author.isBlank()) {
-            author = RandomGenerator.getRandomFullName();
+            author = QuoteDetailsRandomGenerator.getRandomFullName();
             log.info("The author has not been provided, using random author {}...", author);
         }
 
@@ -102,7 +102,7 @@ public class QuoteServiceImpl implements QuoteService {
     private Quote generateQuote(String author) {
         return Quote.builder()
                 .text(
-                        RandomGenerator.getRandomText(
+                        QuoteDetailsRandomGenerator.getRandomText(
                                 quoteGenerationConfig.minWordsCounter,
                                 quoteGenerationConfig.maxWordsCounter
                         )

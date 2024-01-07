@@ -2,7 +2,7 @@ package com.np.ratelimitedservice.util;
 
 import java.util.Random;
 
-public class RandomGenerator {
+public class QuoteDetailsRandomGenerator {
 
     private static final Random RANDOM = new Random();
     private static final String[] WORDS = new String[]{
@@ -30,7 +30,7 @@ public class RandomGenerator {
             "libero"
     };
 
-    private static final String[] NAMES = new String[]{
+    private static final String[] FIRST_NAMES = new String[]{
             "John",
             "Katy",
             "Leon",
@@ -43,7 +43,7 @@ public class RandomGenerator {
             "Sue",
     };
 
-    private static final String[] SURNAMES = new String[]{
+    private static final String[] LAST_NAMES = new String[]{
             "Anderson",
             "Brady",
             "Collins",
@@ -69,9 +69,9 @@ public class RandomGenerator {
     }
 
     public static String getRandomFullName() {
-        int firstNameIndex = RANDOM.nextInt(NAMES.length);
-        int lastNameIndex = RANDOM.nextInt(SURNAMES.length);
+        int firstNameIndex = RANDOM.nextInt(FIRST_NAMES.length);
+        int lastNameIndex = RANDOM.nextInt(LAST_NAMES.length);
 
-        return String.format("%s %s", NAMES[firstNameIndex], SURNAMES[lastNameIndex]);
+        return String.format("%s %s", FIRST_NAMES[firstNameIndex], LAST_NAMES[lastNameIndex]);
     }
 }
