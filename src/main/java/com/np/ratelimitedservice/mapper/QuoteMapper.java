@@ -15,6 +15,5 @@ public class QuoteMapper {
                 .author(quote.getAuthor())
                 .text(quote.getText())
                 .build();
-
     }
 }
