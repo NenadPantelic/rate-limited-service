@@ -42,7 +42,7 @@ public class TokenBucket {
     private void refill() {
         long now = timestampProvider.now();
         // should be refilled
-        if (now > nextRefillTime) {
+        if (now >= nextRefillTime) {
             count = capacity;
             lastRefillTime = now;
             nextRefillTime = now + refillInterval;
