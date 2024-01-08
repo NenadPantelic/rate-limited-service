@@ -4,7 +4,7 @@
 
 - Today, the scalability, availability and reliability are paramount for all web applications.
 - When the app faces a high traffic that makes an impact to its stable functioning. A reasonable thinking when it comes for the first time is to make a vertical scaling (bump up the infra resources used by the app - memory, computational power, storage and network resources).
-- still, if the problem keeps happening, there is a need for design changes. You must protect your service from accidental or deliberate fire in the hole made by the clients. (DoS attack caused by intent or by mistake).
+- still, if the problem keeps happening, there is need for design changes. You must protect your service from accidental or deliberate fire in the hole made by the clients. (DoS attack caused by intent or by mistake).
 - _Rate limiting_ can help make your API more reliable in the following scenarios:
 
 1. One of your users is responsible for a spike in traffic, and you need to stay up for everyone else.
@@ -16,7 +16,7 @@
 your server.
 
 > Q: When to use rate limiting? <br>
-> A: if your users can reduce the frequency of their API requests without affecting the outcome of their requests (if someone checks the the list of their followers on Instagram 50 times per second, it is very unlikely than number will change dramatically in a minute-window)
+> A: if your users can reduce the frequency of their API requests without affecting the outcome of their requests (if someone checks the list of their followers on Instagram 50 times per second, it is very unlikely than number will change dramatically in a minute-window)
 
 ## A word or two about the load
 
@@ -61,7 +61,7 @@ S = Time taken by the handler to process the request
 ## Rate limiting and load shedding
 
 - Rate limiting is a great strategy for day-to-day operations, but in some situations that won't help since some component will be down and the request won't be able to be processed at normal rate. Another example would be a situation where we a have a huge load, where some of the requests are extremely vital and resource intensive, while others are less important.
-- In such a case, we can apply **load shedding**.
+- In such case, we can apply **load shedding**.
 
 > Load shedding is a technique where we drop low-priority requests to make sure that critical actions are served properly.
 
@@ -141,4 +141,11 @@ rate-limit.bandwidths.FREE.capacity=100
 rate-limit.bandwidths.FREE.refill-interval-in-minutes=60
 ```
 
+---
+
+### Students section
+
 **Note:** this project is implemented to demonstrate some concepts of the system design and it is used as a demo project for the course _Design of the information systems and databases_ at the University of Kragujevac (Faculty of Engineering).
+
+Things to think about:
+How would you make a general rate limiter, that is not tied to the user limit, but let's say the app can serve 6000 requests/minute. Try implementing that kind of limiter that limits the overall number of requests, regardless of the number of users.
